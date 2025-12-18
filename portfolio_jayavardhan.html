@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K Jayavardhan - AI & Data Science Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .hero {
+            padding: 100px 0;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h2 {
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.6s backwards;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section {
+            background: white;
+            margin: 40px auto;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 40px;
+            color: #667eea;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .skill-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .skill-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .experience-item, .project-item {
+            background: #f8f9fa;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .experience-item:hover, .project-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .experience-item h3, .project-item h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        .experience-item p, .project-item p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .cert-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .cert-card:hover {
+            transform: scale(1.05);
+        }
+
+        .education-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 40px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+
+        .education-box h3 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .education-box p {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero h2 {
+                font-size: 20px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .section {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">KJ</div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#certifications">Certifications</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>K JAYAVARDHAN</h1>
+            <h2>Artificial Intelligence & Data Science Student</h2>
+            <p>Eager to leverage my technical expertise in Python, SQL, and Data Science in a dynamic environment. Committed to learning, problem-solving, and contributing to innovative projects in Artificial Intelligence and technology.</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📞</span>
+                    <span>7799189644</span>
+                </div>
+                <div class="contact-item">
+                    <span>✉️</span>
+                    <span>kaseeduvardhan99@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <span>📍</span>
+                    <span>Prakasham, Andhra Pradesh</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section id="skills" class="section">
+            <h2 class="section-title">Skills & Expertise</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>🤖 Machine Learning</h3>
+                    <p>Data Analysis using Machine Learning techniques for predictive modeling and pattern recognition</p>
+                </div>
+                <div class="skill-card">
+                    <h3>💻 Programming</h3>
+                    <p>Proficient in Python, SQL, C, and Java for diverse application development</p>
+                </div>
+                <div class="skill-card">
+                    <h3>🎯 Problem Solving</h3>
+                    <p>Strategic chess player with strong analytical and problem-solving capabilities</p>
+                </div>
+                <div class="skill-card">
+                    <h3>🚀 Innovation</h3>
+                    <p>Passionate about exploring new technologies and innovative project development</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="section">
+            <h2 class="section-title">Work Experience</h2>
+            <div class="experience-item">
+                <h3>Clinical AI Internship - Apollo Health City Hyderabad</h3>
+                <p><strong>Focus:</strong> Breast Cancer Prediction</p>
+                <p>Analyzed medical datasets to identify patterns and improve prediction accuracy using advanced machine learning techniques. Contributed to clinical AI development for healthcare applications.</p>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <h2 class="section-title">Projects</h2>
+            <div class="project-item">
+                <h3>Student Registration Form (Java)</h3>
+                <p>Developed a comprehensive student registration system using Java with form validation and data management capabilities.</p>
+            </div>
+            <div class="project-item">
+                <h3>Rock Paper Scissors Game (Python)</h3>
+                <p>Created an interactive game implementation demonstrating Python programming and logic development skills.</p>
+            </div>
+            <div class="project-item">
+                <h3>Disease Prediction System (Machine Learning)</h3>
+                <p>Built a machine learning-based disease prediction system with recommender system and sentiment analysis components.</p>
+            </div>
+            <div class="project-item">
+                <h3>Electrocardiogram (ECG) System</h3>
+                <p>Designed and developed an ECG system to measure pulse rate using embedded systems technology, bridging hardware and software integration.</p>
+            </div>
+        </section>
+
+        <section id="education" class="section">
+            <h2 class="section-title">Education</h2>
+            <div class="education-box">
+                <h3>The Apollo University</h3>
+                <p><strong>Degree:</strong> Artificial Intelligence & Data Science</p>
+                <p><strong>Duration:</strong> 2022 - 2026</p>
+            </div>
+        </section>
+
+        <section id="certifications" class="section">
+            <h2 class="section-title">Certifications & Workshops</h2>
+            <div class="cert-grid">
+                <div class="cert-card">
+                    <h3>🎓 C Certification</h3>
+                    <p>SOLOLEARN</p>
+                </div>
+                <div class="cert-card">
+                    <h3>☁️ Google Cloud Computing</h3>
+                    <p>Foundation Certification</p>
+                </div>
+                <div class="cert-card">
+                    <h3>📊 Data Science for Engineers</h3>
+                    <p>NPTEL Certificate</p>
+                </div>
+                <div class="cert-card">
+                    <h3>🤖 AI & Computer Human Technology</h3>
+                    <p>Workshop Attendance</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Extracurricular Activities</h2>
+            <div class="experience-item">
+                <h3>Volunteer Work</h3>
+                <p>Actively assisted in organizing college fests, tech events, and seminars, demonstrating leadership and teamwork skills.</p>
+            </div>
+            <div class="experience-item">
+                <h3>Creative Interests</h3>
+                <p>Passionate about exploring new technologies, problem-solving challenges, and innovative project development. Enjoy playing chess to enhance strategic thinking abilities.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 K Jayavardhan. All rights reserved.</p>
+            <p>Building the future with AI & Data Science</p>
+        </div>
+    </footer>
+</body>
+</html>
