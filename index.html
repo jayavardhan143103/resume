@@ -3,319 +3,402 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K Jayavardhan | Data Analyst & AI</title>
-    <!-- Font Awesome for Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>K Jayavardhan | Interactive AI Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #00f2ff;
-            --secondary: #7000ff;
-            --glass-bg: rgba(20, 20, 35, 0.75);
-            --text: #e0e0e0;
+            --neon-blue: #00f3ff;
+            --neon-purple: #bc13fe;
+            --bg-color: #050505;
+            --glass: rgba(10, 10, 18, 0.6);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Hide default cursor */ }
+
+        body {
+            background-color: var(--bg-color);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        #cursor, #cursor-blur {
+            position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
+        }
+        #cursor { width: 8px; height: 8px; background: var(--neon-blue); }
+        #cursor-blur { width: 50px; height: 50px; background: var(--neon-blue); filter: blur(20px); opacity: 0.4; transition: width 0.2s, height 0.2s; }
+
+        /* The Canvas */
+        #particle-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+        }
+
+        /* Layout */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 10; }
+
+        /* Typography */
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
         
-        body { 
-            background-color: #000; 
-            color: var(--text); 
-            overflow-x: hidden; 
-        }
-
-        /* 3D Background Container */
-        #vanta-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-        }
-
-        .container { 
-            max-width: 1100px; 
-            margin: 0 auto; 
-            padding: 20px; 
-            position: relative; 
-            z-index: 1; 
-        }
-
-        /* Glassmorphism Header */
+        /* Hero Section */
         header {
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding-left: 20px;
-            animation: fadeIn 2s ease;
+            align-items: flex-start;
+            position: relative;
         }
 
-        h1 { 
-            font-size: 4.5rem; 
-            font-weight: 800;
-            background: linear-gradient(135deg, #fff, var(--primary)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            margin-bottom: 10px; 
-            text-shadow: 0 0 30px rgba(0, 242, 255, 0.3);
+        .hero-glitch {
+            font-size: 5rem;
+            font-weight: 700;
+            position: relative;
+            color: #fff;
+            text-shadow: 2px 2px var(--neon-purple), -2px -2px var(--neon-blue);
         }
 
-        h2 { 
-            font-size: 1.8rem; 
-            color: var(--primary); 
-            margin-bottom: 25px; 
-            font-weight: 300; 
-            letter-spacing: 1px;
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+            margin-top: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--neon-purple);
+            padding-left: 15px;
         }
 
-        p.bio {
-            max-width: 600px; 
-            margin-bottom: 35px; 
-            line-height: 1.7; 
-            color: #ccc;
-            font-size: 1.1rem;
-            background: rgba(0,0,0,0.4);
-            padding: 15px;
-            border-left: 3px solid var(--secondary);
-            backdrop-filter: blur(3px);
-        }
-
-        .btn {
-            padding: 15px 35px;
-            background: rgba(0, 242, 255, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            text-decoration: none;
+        .cta-btn {
+            padding: 15px 40px;
+            background: transparent;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            font-family: 'Orbitron';
             font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.4s;
-            backdrop-filter: blur(5px);
-            margin-right: 15px;
-            display: inline-block;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
         }
 
-        .btn:hover { 
-            background: var(--primary); 
-            color: #000; 
-            box-shadow: 0 0 30px var(--primary); 
-            transform: translateY(-3px);
+        .cta-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 30px var(--neon-blue);
         }
 
         /* Glass Cards */
-        section { padding: 80px 0; }
-        .section-title { 
-            font-size: 2.5rem; 
-            margin-bottom: 40px; 
-            color: #fff; 
-            display: flex; 
-            align-items: center; 
-        }
-        .section-title::after {
-            content: '';
-            height: 2px;
-            width: 100px;
-            background: var(--primary);
-            margin-left: 20px;
-            box-shadow: 0 0 10px var(--primary);
-        }
+        section { padding: 100px 0; }
+        .section-header { font-size: 3rem; margin-bottom: 50px; text-align: center; color: var(--neon-purple); text-shadow: 0 0 10px var(--neon-purple); }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
 
         .card {
-            background: var(--glass-bg);
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+            background: var(--glass);
             backdrop-filter: blur(10px);
-            transition: 0.4s;
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 10px;
+            transition: 0.3s;
             position: relative;
             overflow: hidden;
         }
 
-        /* Card Hover Effect */
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 4px; height: 100%;
-            background: var(--secondary);
-            transition: 0.4s;
-        }
-        
-        .card:hover { 
-            transform: translateY(-10px) scale(1.02); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6); 
-            border-color: var(--primary);
-        }
-        .card:hover::before { background: var(--primary); box-shadow: 0 0 20px var(--primary); }
-
-        .card h3 { color: #fff; margin-bottom: 15px; font-size: 1.4rem; }
-        .card h3 i { color: var(--primary); margin-right: 10px; }
-        .card p { color: #bbb; line-height: 1.6; }
-        
-        .tags { margin-top: 20px; }
-        .tag { 
-            display: inline-block; 
-            background: rgba(255,255,255,0.05); 
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 6px 12px; 
-            font-size: 0.8rem; 
-            margin-right: 8px; 
-            border-radius: 20px; 
-            color: var(--primary);
+        /* 3D Tilt Effect on Hover */
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
         }
 
-        /* Contact Section */
-        .social-links { margin-top: 30px; }
-        .social-links a { 
-            color: #fff; 
-            font-size: 2.2rem; 
-            margin: 0 20px; 
-            transition: 0.3s; 
-        }
-        .social-links a:hover { color: var(--primary); transform: scale(1.2); text-shadow: 0 0 20px var(--primary); }
+        .card h3 { color: var(--neon-blue); margin-bottom: 15px; font-size: 1.5rem; }
+        .card p, .card ul li { color: #ccc; line-height: 1.6; font-size: 1.1rem; list-style: none; margin-bottom: 10px; }
+        .card ul li::before { content: '>'; color: var(--neon-purple); margin-right: 10px; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        
-        @media (max-width: 768px) {
-            h1 { font-size: 2.8rem; }
-            .container { padding: 20px; }
+        /* Skill Tags */
+        .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+        .tag {
+            padding: 5px 15px;
+            border: 1px solid var(--neon-purple);
+            color: #fff;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .tag:hover { background: var(--neon-purple); box-shadow: 0 0 15px var(--neon-purple); }
+
+        /* Contact */
+        .social-icons { display: flex; justify-content: center; gap: 30px; margin-top: 30px; }
+        .social-icons a { font-size: 2.5rem; color: #fff; transition: 0.3s; }
+        .social-icons a:hover { color: var(--neon-blue); transform: scale(1.2); filter: drop-shadow(0 0 10px var(--neon-blue)); }
+
+        @media(max-width: 768px) {
+            .hero-glitch { font-size: 3rem; }
+            * { cursor: auto; } /* Restore cursor on mobile */
+            #cursor, #cursor-blur { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 3D Canvas Background -->
-    <div id="vanta-canvas"></div>
+    <!-- Custom Cursor Elements -->
+    <div id="cursor"></div>
+    <div id="cursor-blur"></div>
+
+    <!-- The Visual Engine -->
+    <canvas id="particle-canvas"></canvas>
 
     <div class="container">
-        <!-- Hero Section -->
         <header>
-            <p style="color: var(--primary); font-weight: bold; letter-spacing: 3px; margin-bottom: 10px;">PORTFOLIO</p>
-            <h1>K Jayavardhan</h1>
-            <h2>Data Analyst & AI Specialist</h2>
-            <p class="bio">
-                Experienced in transforming complex datasets into strategic market opportunities. 
-                Former intern at <b>Belong</b> and <b>Apollo Health City</b>. 
-                Expert in Python, SQL, Power BI, and Predictive Modeling.
+            <p style="color: #888; letter-spacing: 3px; margin-bottom: 10px;">HELLO, I AM</p>
+            <div class="hero-glitch">K JAYAVARDHAN</div>
+            <div class="hero-subtitle">DATA ANALYST | AI SPECIALIST</div>
+            <p style="max-width: 500px; margin-bottom: 40px; color: #ddd;">
+                Transforming raw data into visual stories. 
+                <br>Touch the screen to interact with the neural network.
             </p>
-            <div>
-                <a href="#projects" class="btn">Featured Work</a>
-                <a href="#contact" class="btn">Contact Me</a>
-            </div>
+            <a href="#projects" class="cta-btn">EXPLORE WORK</a>
         </header>
 
-        <!-- Technical Skills -->
         <section id="skills">
-            <h2 class="section-title">Technical Arsenal</h2>
+            <h2 class="section-header">TECHNICAL ARSENAL</h2>
             <div class="grid">
                 <div class="card">
-                    <h3><i class="fas fa-brain"></i> Machine Learning</h3>
-                    <p>Scikit-Learn, Regression, Classification, Model Tuning, Predictive Analytics, EDA.</p>
+                    <h3><i class="fas fa-brain"></i> AI & ML</h3>
+                    <p>Building predictive models with high accuracy.</p>
+                    <div class="tags">
+                        <span class="tag">Scikit-Learn</span>
+                        <span class="tag">TensorFlow</span>
+                        <span class="tag">NLP</span>
+                        <span class="tag">Predictive Modeling</span>
+                    </div>
                 </div>
                 <div class="card">
                     <h3><i class="fas fa-database"></i> Data Engineering</h3>
-                    <p>Python (Pandas, NumPy), SQL (Joins, Query Optimization), Data Cleaning & Transformation.</p>
-                </div>
-                <div class="card">
-                    <h3><i class="fas fa-chart-pie"></i> Visual Intelligence</h3>
-                    <p>Power BI (DAX, Dashboards), Tableau, Matplotlib, Seaborn, Advanced Excel.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Experience -->
-        <section id="experience">
-            <h2 class="section-title">Experience</h2>
-            <div class="grid" style="grid-template-columns: 1fr;">
-                <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <h3>Data Science Intern @ Belong</h3>
-                        <span style="color: var(--primary); font-size: 0.9rem; border: 1px solid var(--primary); padding: 5px 10px; border-radius: 5px;">Remote</span>
-                    </div>
-                    <p style="color: #888; margin-bottom: 10px;">June 2024 - August 2024</p>
-                    <ul style="margin-left: 20px; color: #ccc; line-height: 1.8;">
-                        <li>Processed global customer survey dataset (10,000+ records) to enhance data quality.</li>
-                        <li>Built Python visualizations to interpret customer behavior for stakeholders.</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <h3>Clinical AI Intern (Lead) @ Apollo Health City</h3>
-                        <span style="color: var(--primary); font-size: 0.9rem; border: 1px solid var(--primary); padding: 5px 10px; border-radius: 5px;">Hyderabad</span>
-                    </div>
-                    <p style="color: #888; margin-bottom: 10px;">May 2024 - June 2024</p>
-                    <ul style="margin-left: 20px; color: #ccc; line-height: 1.8;">
-                        <li>Led a 4-member team developing ML models for breast cancer detection (92% accuracy).</li>
-                        <li>Performed statistical analysis on clinical data to identify key health indicators.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects -->
-        <section id="projects">
-            <h2 class="section-title">Key Projects</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Emotion Detection System</h3>
-                    <p>An end-to-end NLP pipeline classifying emotions from text data. Models evaluated using Precision, Recall, and F1-score.</p>
+                    <p>Cleaning and structuring complex datasets.</p>
                     <div class="tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">NLP</span>
-                        <span class="tag">AI</span>
+                        <span class="tag">Python (Pandas)</span>
+                        <span class="tag">SQL</span>
+                        <span class="tag">Data Cleaning</span>
+                        <span class="tag">ETL</span>
                     </div>
                 </div>
                 <div class="card">
-                    <h3>Sales Performance Dashboard</h3>
-                    <p>Interactive Power BI dashboard tracking revenue, profit, and orders. Features complex DAX measures for deep financial insights.</p>
+                    <h3><i class="fas fa-chart-line"></i> Visualization</h3>
+                    <p>Turning numbers into strategic insights.</p>
                     <div class="tags">
                         <span class="tag">Power BI</span>
                         <span class="tag">DAX</span>
-                        <span class="tag">Business Intelligence</span>
+                        <span class="tag">Tableau</span>
+                        <span class="tag">Matplotlib</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Contact -->
-        <section id="contact" style="text-align: center; margin-bottom: 50px;">
-            <h2 class="section-title" style="justify-content: center; border: none;">Let's Connect</h2>
-            <p style="max-width: 600px; margin: 0 auto 30px auto; color: #aaa;">
-                I am currently open for full-time Data Analyst and Data Science roles.
-            </p>
-            <div class="social-links">
-                <a href="mailto:kaseeduvardhan99@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
-                <a href="https://linkedin.com/in/kaseeduvardhan" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                <a href="https://github.com/jayavardhan143103" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        <section id="experience">
+            <h2 class="section-header">EXPERIENCE</h2>
+            <div class="grid" style="grid-template-columns: 1fr;">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                        <h3>Data Science Intern @ Belong</h3>
+                        <span style="color: var(--neon-blue);">Jun 2024 - Aug 2024</span>
+                    </div>
+                    <ul>
+                        <li>Processed global customer survey dataset (10,000+ records), significantly improving data quality.</li>
+                        <li>Created automated visual insights using Python to communicate customer behavior trends.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                        <h3>Clinical AI Intern @ Apollo Health City</h3>
+                        <span style="color: var(--neon-blue);">May 2024 - Jun 2024</span>
+                    </div>
+                    <ul>
+                        <li>Led a team of 4 to develop ML models for breast cancer detection, achieving 92% diagnostic accuracy.</li>
+                        <li>Conducted statistical analysis on clinical datasets to identify key health indicators.</li>
+                    </ul>
+                </div>
             </div>
-            <p style="margin-top: 50px; font-size: 0.8rem; color: #555;">&copy; 2025 K Jayavardhan. Powered by Three.js & Vanta.</p>
+        </section>
+
+        <section id="projects">
+            <h2 class="section-header">PROJECTS</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Emotion Detection System</h3>
+                    <p>An end-to-end NLP pipeline classifying human emotions from text data. Evaluated using Precision, Recall, and F1-score.</p>
+                    <div class="tags"><span class="tag">NLP</span><span class="tag">Python</span></div>
+                </div>
+                <div class="card">
+                    <h3>Sales Performance Dashboard</h3>
+                    <p>Interactive Power BI dashboard tracking revenue, profit, and orders. Features complex DAX measures for financial metrics.</p>
+                    <div class="tags"><span class="tag">Power BI</span><span class="tag">Business Intelligence</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" style="padding-bottom: 100px;">
+            <h2 class="section-header">INITIATE CONNECTION</h2>
+            <div style="text-align: center; max-width: 600px; margin: 0 auto; color: #aaa;">
+                <p>Ready to deploy my skills for your data needs.</p>
+            </div>
+            <div class="social-icons">
+                <a href="mailto:kaseeduvardhan99@gmail.com"><i class="fas fa-envelope"></i></a>
+                <a href="https://linkedin.com/in/kaseeduvardhan" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/jayavardhan143103" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
         </section>
     </div>
 
-    <!-- SCRIPTS: Three.js & Vanta.js for 3D Effects -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>
-    
+    <!-- JAVASCRIPT: THE VISUAL ENGINE -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            VANTA.NET({
-                el: "#vanta-canvas",
-                mouseControls: true,
-                touchControls: true,
-                gyroControls: false,
-                minHeight: 200.00,
-                minWidth: 200.00,
-                scale: 1.00,
-                scaleMobile: 1.00,
-                color: 0x00f2ff,       // Cyan connection lines
-                backgroundColor: 0x050505, // Dark background
-                points: 12.00,         // Amount of dots
-                maxDistance: 22.00,    // Connection distance
-                spacing: 16.00,        // Space between dots
-                showDots: true
-            })
+        // 1. Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        const cursorBlur = document.getElementById('cursor-blur');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            // Add a slight delay to the blur for a "trailing" effect
+            setTimeout(() => {
+                cursorBlur.style.left = e.clientX + 'px';
+                cursorBlur.style.top = e.clientY + 'px';
+            }, 50);
         });
+
+        // 2. Interactive Particle Physics
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let mouse = { x: null, y: null, radius: 150 };
+
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+        
+        // Touch support
+        window.addEventListener('touchmove', (event) => {
+            mouse.x = event.touches[0].clientX;
+            mouse.y = event.touches[0].clientY;
+        });
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+                this.baseX = x; // Remember original position
+                this.baseY = y;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                // Physics: Check distance between particle and mouse
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                let forceDirectionX = dx / distance;
+                let forceDirectionY = dy / distance;
+                let maxDistance = mouse.radius;
+                let force = (maxDistance - distance) / maxDistance;
+                let directionX = forceDirectionX * force * 5; // Speed of reaction
+                let directionY = forceDirectionY * force * 5;
+
+                if (distance < mouse.radius) {
+                    // Repulsion effect (move away from mouse)
+                    this.x -= directionX * 5; 
+                    this.y -= directionY * 5;
+                    this.color = '#bc13fe'; // Change color to purple on interaction
+                } else {
+                    // Return to original state (drift)
+                    if (this.x !== this.baseX) {
+                        let dx = this.x - this.baseX;
+                        this.x -= dx / 20; // Smooth return ease
+                    }
+                    if (this.y !== this.baseY) {
+                        let dy = this.y - this.baseY;
+                        this.y -= dy / 20;
+                    }
+                    this.color = '#00f3ff'; // Back to blue
+                }
+                this.draw();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 10000; 
+            for (let i = 0; i < numberOfParticles * 2; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 2) - 1;
+                let directionY = (Math.random() * 2) - 1;
+                let color = '#00f3ff';
+
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width/7) * (canvas.height/7)) {
+                        opacityValue = 1 - (distance/20000);
+                        ctx.strokeStyle = 'rgba(0, 243, 255,' + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            init();
+        });
+
+        // Click explosion effect
+        window.addEventListener('click', (e) => {
+            mouse.radius = 300; // Expand radius briefly
+            setTimeout(() => { mouse.radius = 150 }, 200);
+        });
+
+        init();
+        animate();
     </script>
 </body>
 </html>
